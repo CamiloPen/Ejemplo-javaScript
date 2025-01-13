@@ -17,8 +17,8 @@ function areas(figura) {
         mensaje1 = "diagonal 1"
         mensaje2 = "diagonal 2"
     }
-    base = prompt("Area del " + figura + "\nPor favor digite La base del " + figura)
-    altura = prompt("Area del " + figura + "\nPor favor digite La altura del " + figura)
+    base = prompt("Area del " + figura + "\nPor favor digite " + mensaje1 + " del " + figura)
+    altura = prompt("Area del " + figura + "\nPor favor digite " + mensaje2 + " del " + figura)
     resultado = base * altura
 
     if (figura == "triangulo") {
@@ -36,18 +36,26 @@ while (true) {
         case "1":
             resultado = areas("rectangulo")
             alert("El area del rectangulo es: " + resultado)
+            break
         case "2":
             resultado = areas("triangulo")
             alert("El area del triangulo es: " + resultado)
+            break
         case "3":
             resultado = areaCirculo()
             alert("El area del Circulo es: " + resultado)
+            break
         case "4":
             resultado = areas("rombo")
             alert("El area del rombo es: " + resultado)
+            break
         case "5":
-            break;
+            alert("Gracias por usar el programa")
+            break
         default:
             alert("Opción incorrecta")
+            break
     }
+
+    if (opc == "5"){break}
 }
