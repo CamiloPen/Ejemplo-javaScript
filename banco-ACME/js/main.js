@@ -45,13 +45,10 @@ while (ciclo == true) {
             break;
         case "5":
             alert(`lista de Movimientos`)
-            const respuesta = listaMovimientos()
-            if (respuesta == 1) {
-                alert("No se encontraron movimientos")
-            } else if (respuesta == 2) {
-                alert("No se encontro ese número de cuenta")
-            } else if (respuesta == 0) {
+            if (listaMovimientos()) {
                 alert("Para ver la lista abra la consola")
+            } else {
+                alert("No se encontraron movimientos")
             }
             break;
         case "6":
@@ -108,10 +105,6 @@ function registrar() {
 }
 
 function log(buscador) {
-    if (buscador == "documento") {
-
-    }  
-
     const busqueda = prompt("Por favor digite el número de " + buscador)
     for (let i in dbCuentas){
         if (dbCuentas[i].cuenta == busqueda) {
@@ -166,6 +159,9 @@ function consignar(opc) {
 function descuento(movimiento){
     exito = false
     let mensaje = "Por favor ingrese la cantidad a retirar"
+
+    cliente = log("cuenta")
+
     if (movimiento == "pagos") {
         const servicio = menuServicios()
         if (servicio.servicio == 1) {
@@ -183,8 +179,6 @@ function descuento(movimiento){
     } else {
         desc = "Retiro en efectivo"
     }
-
-    cliente = log("cuenta")
 
     if (cliente != false) {
         const dinero = Number(prompt(mensaje))
@@ -204,22 +198,21 @@ function descuento(movimiento){
 ////////////////////////////// MOVIMIENTOS ///////////////////////
 
 function registrarMovimiento(cuenta, tipo, dinero, saldo, desc) {
-    dbMovimiento.push({cuenta, tipo, dinero, saldo, desc})
+    dbMovimiento.push({numRef, cuenta, tipo, dinero, saldo, desc})
+    numRef += 1
 }
 
 function listaMovimientos() {
-
     cliente = log("cuenta")
 
     if (cliente != false) {
         for (let i in dbMovimiento){
             if (dbMovimiento[i].cuenta == cliente.cuenta) {
                 console.log(dbMovimiento[i])
-            } else {
-                respuesta = 1
+                return true
             }
         }
     }
 
-    return respuesta
+    return false
 }
