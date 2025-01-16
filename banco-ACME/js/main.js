@@ -20,7 +20,8 @@ while (ciclo == true) {
             break;
         case "2":
             alert("Consignar Dinero")
-            if (consignar(menuConsignar(), dbCuentas)) {
+            const opc = menuConsignar()
+            if (consignar(opc)) {
                 alert("Consignacion exitosa")
             } else {
                 alert("Consignacion fallida")
@@ -28,23 +29,30 @@ while (ciclo == true) {
             break;
         case "3":
             alert("Retirar Dinero")
-            if (descuento("retirar", dbCuentas)) {
+            if (descuento("retirar")) {
                 alert("Retiro exitoso")
             } else {
                 alert("Retiro fallido")
             }
             break;
         case "4":
-            alert("Retirar Dinero")
-            if (descuento("pagos", dbCuentas)) {
+            alert("Pagar recibos")
+            if (descuento("pagos")) {
                 alert("Pago exitoso")
             } else {
                 alert("Pago fallido")
             }
             break;
         case "5":
-            alert("lista de Movimientos")
-            listaMovimientos()
+            alert(`lista de Movimientos`)
+            const respuesta = listaMovimientos()
+            if (respuesta == 1) {
+                alert("No se encontraron movimientos")
+            } else if (respuesta == 2) {
+                alert("No se encontro ese número de cuenta")
+            } else if (respuesta == 0) {
+                alert("Para ver la lista abra la consola")
+            }
             break;
         case "6":
             alert(("Gracias Por Preferir nuestro banco"))
@@ -59,31 +67,31 @@ while (ciclo == true) {
 /////////////////////////// MENUS ////////////////////////
 
 function menuPrincipal(){
-    return prompt(
-        `1. Crear una cuenta
-         2. Consignar dinero
-         3. Retirar dinero
-         4. Pagar servicios 
-         5. Lista de movimientos
-         6. Salir
-         Por favor elija una opción (1-6)`)
+    return prompt(`
+        1. Crear una cuenta
+        2. Consignar dinero
+        3. Retirar dinero
+        4. Pagar servicios 
+        5. Lista de movimientos
+        6. Salir
+        Por favor elija una opción (1-6)`)
 }
 
 function menuConsignar() {
     return prompt(
         `Para consignar por favor seleccione
 
-         1.Número de cuenta
-         2.Número de documento`
+            1.Número de cuenta
+            2.Número de documento`
     )
 }
 
 function menuServicios() {
     return {servicio: prompt(
         `Escriba el servicio a pagar
-        1.Energía
-        2.Agua
-        3.Gas`), referencia: prompt("Ingrese el número de referencia")}
+            1.Energía
+            2.Agua
+            3.Gas`), referencia: prompt("Ingrese el número de referencia")}
 }
 
 //////////////// USUARIOS /////////////////////////////
@@ -99,41 +107,64 @@ function registrar() {
     return numCuenta
 }
 
+function log(buscador) {
+    if (buscador == "documento") {
+
+    }  
+
+    const busqueda = prompt("Por favor digite el número de " + buscador)
+    for (let i in dbCuentas){
+        if (dbCuentas[i].cuenta == busqueda) {
+            const pass = prompt("Por favor digite la contraseña")
+            if (pass == dbCuentas[i].contraseña) {
+                return dbCuentas[i]
+            } else {
+                alert("Contraseña incorrecta")
+            }
+        }
+    };
+
+    return false
+}
+
 ////////////////// TRANSACCIONES ///////////////////
 
-function consignar(opc, dbCuentas) {
+function consignar(opc) {
     let buscador = ""
-
+    let buscar = 0
+    
     if (opc == "1") {
         buscador = "cuenta"
     } else if (opc == "2") {
         buscador = "documento"
-    }
-
-    if (buscador == "") {
-        alert("Opción incorrecta")
-        return exito
     } else {
-        const busqueda = prompt("Por favor digite el número de " + buscador)
-        for (let i in dbCuentas){
-            if (dbCuentas[i].cuenta == busqueda) {
-                const dinero = Number(prompt("Por favor ingrese la cantidad a consignar"))
-                dbCuentas[i].saldo += dinero
-                desc = "Consignación a cuenta"
-                exito = true
-                registrarMovimiento(dbCuentas[i].cuenta, "consignacion", dinero, dbCuentas[i].saldo, desc)
-                break
-            } else {
-                console.log(dbCuentas[i].buscador)
-                alert("No se encontro ese número de " + buscador)
-            }
-        };
-        return exito
+        alert("Opción incorrecta")
+        return false
     }
+    
+    const busqueda = Number(prompt("Por favor digite el número de " + buscador))
+    for (let i in dbCuentas){
+        if (opc == "1") {
+            buscar = dbCuentas[i].cuenta
+        } else if (opc == "2") {
+            buscar = dbCuentas[i].documento
+        }
+        
+        if (buscar == busqueda) {
+            const dinero = Number(prompt("Por favor ingrese la cantidad a consignar"))
+            dbCuentas[i].saldo += dinero
+            desc = "Consignación a cuenta"
+            registrarMovimiento(dbCuentas[i].cuenta, "consignacion", dinero, dbCuentas[i].saldo, desc)
+            return true
+        }
+    };
+
+    alert("No se encontro ese número de " + buscador)
+    return false
 }
 
-function descuento(movimiento, dbCuentas){
-    const busqueda = prompt("Por favor digite el número de cuenta")
+function descuento(movimiento){
+    exito = false
     let mensaje = "Por favor ingrese la cantidad a retirar"
     if (movimiento == "pagos") {
         const servicio = menuServicios()
@@ -145,7 +176,7 @@ function descuento(movimiento, dbCuentas){
             desc = "gas"
         } else {
             alert("Opción incorrecta")
-            return false
+            return exito
         }
         mensaje = "Digite el valor a pagar"
         desc = "Pagó un recibo de " + desc + " Ref: " + servicio.referencia
@@ -153,23 +184,20 @@ function descuento(movimiento, dbCuentas){
         desc = "Retiro en efectivo"
     }
 
-    for (let i in dbCuentas){
-        if (dbCuentas[i].cuenta == busqueda) {
-            const dinero = Number(prompt(mensaje))
-            if (dbCuentas[i].saldo < dinero) {
-                alert("Saldo insuficiente")
-                exito = false
-            } else {
-                dbCuentas[i].saldo -= dinero
-                registrarMovimiento(dbCuentas[i].cuenta, movimiento, dinero, dbCuentas[i].saldo, desc)
-                exito = true
-            }
-            
+    cliente = log("cuenta")
+
+    if (cliente != false) {
+        const dinero = Number(prompt(mensaje))
+        if (cliente.saldo < dinero) {
+            alert("Saldo insuficiente")
+            exito = false
         } else {
-            alert("No se encontro ese número de cuenta")
+            cliente.saldo -= dinero
+            registrarMovimiento(cliente.cuenta, movimiento, dinero, cliente.saldo, desc)
+            exito = true
         }
-    };
-    
+    }
+
     return exito
 }
 
@@ -180,10 +208,18 @@ function registrarMovimiento(cuenta, tipo, dinero, saldo, desc) {
 }
 
 function listaMovimientos() {
-    const busqueda = prompt("Por favor digite el número de cuenta")
-    for (let i in dbMovimiento){
-        if (dbMovimiento[i].cuenta == busqueda) {
-            alert(dbMovimiento[i])
+
+    cliente = log("cuenta")
+
+    if (cliente != false) {
+        for (let i in dbMovimiento){
+            if (dbMovimiento[i].cuenta == cliente.cuenta) {
+                console.log(dbMovimiento[i])
+            } else {
+                respuesta = 1
+            }
         }
     }
+
+    return respuesta
 }
