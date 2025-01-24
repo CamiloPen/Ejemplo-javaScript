@@ -45,8 +45,11 @@ while (ciclo == true) {
             break;
         case "5":
             alert(`lista de Movimientos`)
-            if (listaMovimientos()) {
-                alert("Para ver la lista abra la consola")
+            lista = listaMovimientos()
+            if (lista != "") {
+                alert(`N° Referencia | N° Cuenta | Tipo | Cantidad | Saldo | Descripción
+------------------------------------------------------------------------------------------
+${lista}`)
             } else {
                 alert("No se encontraron movimientos")
             }
@@ -204,15 +207,16 @@ function registrarMovimiento(cuenta, tipo, dinero, saldo, desc) {
 
 function listaMovimientos() {
     cliente = log("cuenta")
+    let lista = ""
 
     if (cliente != false) {
         for (let i in dbMovimiento){
             if (dbMovimiento[i].cuenta == cliente.cuenta) {
-                console.log(dbMovimiento[i])
-                return true
+                lista += `${dbMovimiento[i].numRef} | ${dbMovimiento[i].cuenta} | ${dbMovimiento[i].tipo} | ${dbMovimiento[i].dinero} | ${dbMovimiento[i].saldo} | ${dbMovimiento[i].desc}
+`
             }
         }
     }
 
-    return false
+    return lista
 }
