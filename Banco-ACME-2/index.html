@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BANCO ACME</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div id="menuPrincipal">
+        <h2>
+            ¡Bienvenido a Acme Bank! <br><br>
+            Por favor elija una opción:
+        </h2>
+        <input id="crear" type="button" value="1. Crear una cuenta">
+        <input class="boton" id="consignar" type="button" value="2. Consignar dinero">
+        <input class="boton" id="retirar" type="button" value="3. Retirar dinero">
+        <input class="boton" id="pagar" type="button" value="4. Pagar servicios ">
+        <input class="boton" id="lista" type="button" value="5. Lista de movimientos">
+    </div>
+    <form id="registarCuenta" >
+        <h2>Crear Cuenta</h2>
+        <input type="text" name="documento" id="documento" placeholder="Por favor digite el número de documento" required>
+        <input type="text" name="nombre" id="nombre" placeholder="Por favor escriba su nombre" required>
+        <input type="password" name="contraseña" id="contraseña" placeholder="Por ingrese una contraseña" required>
+        <input id="btnRegistrar" type="button" value="Crear cuenta">
+    </form>
+    <form id="busqueda" action="">
+        <h2 id="movimiento"></h2>
+        <input type="text" id="cuenta" name="cuenta" placeholder="Por favor digite el número de cuenta" required>
+        <input type="password" name="contraseña" id="BuscarContraseña" placeholder="Por ingrese una contraseña" required>
+        <input id="btnBuscar" type="button" value="Continuar">
+    </form>
+    <form id="retiro">
+        <h2 id="transaccion"></h2>
+        <label for="recibo">Seleccione el recibo a pagar</label>
+        <select name="recibo" id="recibo">
+            <option value="agua">1. Agua</option>
+            <option value="energia">2. Energia</option>
+            <option value="gas">3. Gas</option>
+        </select>
+        <input type="text" id="dinero" name="dinero" placeholder="Por favor ingrese la cantidad">
+        <input id="btnContinuar" type="button" value="Continuar">
+    </form>
+    <script src="js/main.js"></script>
+</body>
+</html>
