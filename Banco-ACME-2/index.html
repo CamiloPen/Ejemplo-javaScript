@@ -7,17 +7,17 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <div id="menuPrincipal">
+    <form id="menuPrincipal">
         <h2>
             ¡Bienvenido a Acme Bank! <br><br>
             Por favor elija una opción:
         </h2>
-        <input id="crear" type="button" value="1. Crear una cuenta">
-        <input class="boton" id="consignar" type="button" value="2. Consignar dinero">
-        <input class="boton" id="retirar" type="button" value="3. Retirar dinero">
-        <input class="boton" id="pagar" type="button" value="4. Pagar servicios ">
-        <input class="boton" id="lista" type="button" value="5. Lista de movimientos">
-    </div>
+        <input class="registarCuenta" type="button" value="1. Crear una cuenta">
+        <input class="busqueda" id="consignar" type="button" value="2. Consignar dinero">
+        <input class="busqueda" id="retirar" type="button" value="3. Retirar dinero">
+        <input class="busqueda" id="pagar" type="button" value="4. Pagar servicios ">
+        <input class="busqueda" id="lista" type="button" value="5. Lista de movimientos">
+    </form>
     <form id="registarCuenta" >
         <h2>Crear Cuenta</h2>
         <input type="text" name="documento" id="documento" placeholder="Por favor digite el número de documento" required>
@@ -28,8 +28,7 @@
     <form id="busqueda" action="">
         <h2 id="movimiento"></h2>
         <input type="text" id="cuenta" name="cuenta" placeholder="Por favor digite el número de cuenta" required>
-        <input type="password" name="contraseña" id="BuscarContraseña" placeholder="Por ingrese una contraseña" required>
-        <input id="btnBuscar" type="button" value="Continuar">
+        <input id="btnBuscar" class="retiro" type="button" value="Continuar">
     </form>
     <form id="retiro">
         <h2 id="transaccion"></h2>

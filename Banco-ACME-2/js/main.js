@@ -1,52 +1,60 @@
 const menu = document.getElementById("menuPrincipal")
-const crear = document.getElementById("crear")
-const consignar = document.getElementById("consignar")
-const retirar = document.getElementById("retirar")
-const pagar = document.getElementById("pagar")
-const lista = document.getElementById("lista")
-const btnRegistrar = document.getElementById("btnRegistrar")
-const btnBuscar = document.getElementById("btnBuscar")
-const btnContinuar = document.getElementById("btnContinuar")
-
-const formCuenta = document.querySelector("#registarCuenta")
-const busqueda = document.querySelector("#busqueda")
-const retiro = document.querySelector("#retiro")
+const botones = document.querySelectorAll("input[type = 'button']")
+const forms = document.querySelectorAll("form")
+let tipoMovimiento = ""
+let mostrar = ""
+initDB()
 numCuenta = 1
 
-menu.setAttribute('style', 'display: flex;')
+menu.classList.add("ver")
 
-function toggle(esconder) {
-    esconder.setAttribute("style", "display: flex")
-    menu.toggleAttribute('style')
+botones.forEach(boton => {
+    boton.addEventListener("click", () => {
+        const classBoton = boton.getAttribute("class")
+        tipoMovimiento = boton.getAttribute("id")
+        forms.forEach(form => {
+            const idForm = form.getAttribute("id")
+            if (classBoton == idForm) {
+                const titulo = document.getElementById("movimiento")
+                switch (tipoMovimiento) {
+                    case "consignar":
+                        titulo.innerText = "Consignar"
+                        break;
+                    case "retirar":
+                        titulo.innerText = "Retirar"
+                        break;
+                    case "pagar":
+                        titulo.innerText = "Pagar"
+                        break;
+                    case "lista":
+                        titulo.innerText = "Lista"
+                        break;
+                    default:
+                        break;
+                }
+                mostrar = form
+                console.log(mostrar.outerHTML)
+                toggle(form, menu)
+            } 
+        })
+    })
+});
+
+function toggle(esconder, esconder2) {
+    esconder.classList.toggle("ver")
+    esconder2.classList.toggle("ver")
+    console.log(tipoMovimiento)
 }
 
-crear.addEventListener("click", () =>{
-    toggle(formCuenta)
-})
-
-consignar.addEventListener("click", () =>{
-    toggle(busqueda)
-})
-
-retirar.addEventListener("click", () =>{
-    toggle(busqueda)
-})
-
-pagar.addEventListener("click", () =>{
-    toggle(busqueda)
-})
-
-lista.addEventListener("click", () =>{
-    toggle(busqueda)
-})
-
 btnRegistrar.addEventListener("click", () => {
+    const formCuenta = document.querySelector("#registarCuenta") 
     const form = new FormData(formCuenta)
     registarCuenta(numCuenta, form.get("documento"), form.get("nombre"), form.get("contraseña"))
     numCuenta ++
-    formCuenta.toggleAttribute('style')
-    menu.setAttribute("style", "display: flex")
-}) 
+    toggle(formCuenta, menu)
+})
+
+
 
 function initDB() {
     const openDB = window.indexedDB.open("bancoDB", 1)
@@ -83,7 +91,7 @@ function registarCuenta(cuenta, documento, nombre, contraseña) {
         if (documento == "" || nombre == "" || contraseña == "") {
             alert("Por favor no deje espacios en blanco")
         } else {
-            const nuevoProducto = {cuenta, documento, nombre, contraseña}
+            const nuevoProducto = {cuenta, documento, nombre, contraseña, saldo: 0}
             const agregarRequest = cuentaStore.add(nuevoProducto)
 
             agregarRequest.onsuccess = () => {
@@ -113,4 +121,3 @@ function obtenerTodosProductos() {
     }
 }
 
-initDB()
