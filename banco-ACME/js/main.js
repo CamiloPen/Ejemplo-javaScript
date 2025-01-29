@@ -1,129 +1,105 @@
+const menu = document.getElementById("menuPrincipal")
+const botones = document.querySelectorAll(".busqueda")
+const forms = document.querySelectorAll("form")
+const registrar = document.getElementById("registrar")
+const btnRegistrar = document.getElementById("btnRegistrar")
+const transaccion = document.getElementById("transaccion")
+const btnBuscar = document.getElementById("btnBuscar")
+let tipoMovimiento = ""
+let mostrar = document.getElementById("registarCuenta")
 const dbCuentas = []
 const dbMovimiento = []
-let numCuenta = 1
-let numRef = 1
-let ciclo = true
-let exito = false
+let cuenta = {}
+
+menu.classList.add("ver")
+
+botones.forEach(boton => {
+    boton.addEventListener("click", () => {
+        if (dbCuentas.length == 0) {
+            alert("No hay cuentas registradas")
+        } else {
+            const classBoton = boton.getAttribute("class")
+            tipoMovimiento = boton.getAttribute("id")
+            forms.forEach(form => {
+                const idForm = form.getAttribute("id")
+                if (classBoton == idForm) {
+                    const titulos = document.querySelectorAll(".movimiento")
+                    titulos.forEach(titulo => {
+                        titulo.innerText = tipoMovimiento.toLocaleUpperCase()
+                    })
+                    mostrar = form
+
+                    let pass = document.getElementById("buscarContraseña")
+                    if (tipoMovimiento == "consignar") {
+                        pass.setAttribute("style", "display: none;")
+                    } else {
+                        pass.removeAttribute("style")
+                    }
+                    
+                    toggle(form, menu)
+                    console.log(tipoMovimiento)
+                } 
+            })
+        }
+    })
+});
+
+function toggle(esconder, esconder2) {
+    esconder.classList.toggle("ver")
+    esconder2.classList.toggle("ver")
+}
+
+let numCuenta = dbCuentas.length +1
+let numRef = dbMovimiento.length + 1
 let desc = ""
 
-alert("¡Bienvenido a Acme Bank!");
-
-while (ciclo == true) {
-    const opc = menuPrincipal()
-    switch (opc) {
-        case "1":
-            alert("Registro")
-            if (registrar()) {
-                alert("Registro exitoso el numero de cuenta es: " + numCuenta)
-                numCuenta += 1
-            };
-            break;
-        case "2":
-            alert("Consignar Dinero")
-            const opc = menuConsignar()
-            if (consignar(opc)) {
-                alert("Consignacion exitosa")
-            } else {
-                alert("Consignacion fallida")
-            }
-            break;
-        case "3":
-            alert("Retirar Dinero")
-            if (descuento("retirar")) {
-                alert("Retiro exitoso")
-            } else {
-                alert("Retiro fallido")
-            }
-            break;
-        case "4":
-            alert("Pagar recibos")
-            if (descuento("pagos")) {
-                alert("Pago exitoso")
-            } else {
-                alert("Pago fallido")
-            }
-            break;
-        case "5":
-            alert(`lista de Movimientos`)
-            lista = listaMovimientos()
-            if (lista != "") {
-                alert(`N° Referencia | N° Cuenta | Tipo | Cantidad | Saldo | Descripción
-------------------------------------------------------------------------------------------
-${lista}`)
-            } else {
-                alert("No se encontraron movimientos")
-            }
-            break;
-        case "6":
-            alert(("Gracias Por Preferir nuestro banco"))
-            ciclo = false
-            break;
-        default:
-            alert("Opción incorrecta")
-            break;
-    }
-}
-
-/////////////////////////// MENUS ////////////////////////
-
-function menuPrincipal(){
-    return prompt(`
-        1. Crear una cuenta
-        2. Consignar dinero
-        3. Retirar dinero
-        4. Pagar servicios 
-        5. Lista de movimientos
-        6. Salir
-        Por favor elija una opción (1-6)`)
-}
-
-function menuConsignar() {
-    return prompt(
-        `Para consignar por favor seleccione
-
-            1.Número de cuenta
-            2.Número de documento`
-    )
-}
-
-function menuServicios() {
-    return {servicio: prompt(
-        `Escriba el servicio a pagar
-            1.Energía
-            2.Agua
-            3.Gas`), referencia: prompt("Ingrese el número de referencia")}
-}
+registrar.addEventListener("click", () => {
+    toggle(mostrar, menu)
+})
 
 //////////////// USUARIOS /////////////////////////////
 
-function registrar() {
-    dbCuentas.push({
-        cuenta: numCuenta,
-        documento: prompt("Por favor digite el número de documento").toLowerCase(),
-        nombre: prompt("Por favor escriba su nombre"),
-        contraseña: prompt("Por ingrese una contraseña"),
-        saldo: 0,
-    })
-    return numCuenta
-}
+btnRegistrar.addEventListener("click", () => {
+    const form = new FormData(mostrar)
+    const documento = form.get("documento")
+    const nombre = form.get("nombre")
+    const contraseña = form.get("contraseña")
 
-function log(buscador) {
-    const busqueda = prompt("Por favor digite el número de " + buscador)
-    for (let i in dbCuentas){
-        if (dbCuentas[i].cuenta == busqueda) {
-            const pass = prompt("Por favor digite la contraseña")
-            if (pass == dbCuentas[i].contraseña) {
-                return dbCuentas[i]
+    if (documento == "" || nombre == "" || contraseña == "") {
+        alert("Por favor no deje espacios en blanco")
+    } else {
+        dbCuentas.push({numCuenta, documento, nombre, contraseña, saldo: 0})
+        alert("Su numero de cuenta es: " + numCuenta)
+        numCuenta ++
+        toggle(mostrar, menu)
+    }
+})
+
+btnBuscar.addEventListener("click", () => {
+    const form = new FormData(mostrar)
+    const cuentaBuscar = form.get("cuenta")
+    if (tipoMovimiento == "consignar") {
+        cuenta = dbCuentas.find(cuenta => {
+            if (cuenta.numCuenta == cuentaBuscar){
+                toggle(mostrar, transaccion)
             } else {
-                alert("Contraseña incorrecta")
+                alert("Numero de cuenta no existe")
             }
-        }
-    };
-
-    return false
-}
+        })
+    } else {
+        const contraseñaBuscar = form.get("buscarContraseña")
+        cuenta = dbCuentas.find(cuenta => {
+            if (cuenta.numCuenta == cuentaBuscar && cuenta.contraseña == contraseñaBuscar){
+                toggle(mostrar, transaccion)
+            } else {
+                alert("El número de cuenta o contraseña no coinciden")
+            }
+        })
+    }
+})
 
 ////////////////// TRANSACCIONES ///////////////////
+
 
 function consignar(opc) {
     let buscador = ""
@@ -217,6 +193,5 @@ function listaMovimientos() {
             }
         }
     }
-
     return lista
 }
