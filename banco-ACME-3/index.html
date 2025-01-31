@@ -47,13 +47,13 @@
             <input type="text" id="numRef" class="bordeBottom" name="numRef" placeholder="Ingrese el numero de referencia">
         </div>
         <input type="number" id="dinero" name="dinero">
-        <input id="btnContinuar" class="bordeBottom" type="button" value="Continuar" onclick="transaccion()">
+        <input id="btnContinuar" class="bordeBottom" type="button" value="Continuar" onclick="transaccion(dbCuentas)">
     </form>
     <div id="listaMovimientos">
         <h2 class="bordeTop">Lista de movimientos</h2>
         <table border="1" id="tabla">
         </table>
-        <input type="button" class="bordeBottom" value="Volver" id="atras" onclick="toggle(menu, vistaForm)">
+        <input type="button" class="bordeBottom" value="Volver" id="atras" onclick="toggle(menu, vistaForm); limpiar()">
     </div>
     <script src="js/main.js"></script>
 </body>

@@ -10,7 +10,7 @@ let recibos = document.getElementById("pago")
 let vistaForm = ""
 let dbCuentas = obtenerDatos("cuentas")
 let dbMovimiento = obtenerDatos("movimientos")
-let numRef = dbMovimiento.length + 1
+console.log(numRef)
 let cuentaEncontrada = ""
 let tipoMovimiento = ""
 let desc = ""
@@ -88,6 +88,7 @@ function registrar() {
     }
     limpiar()
     agregarDatos(dbCuentas, "cuentas")
+    dbCuentas = obtenerDatos("cuentas")
 }
 
 function buscar() {
@@ -139,6 +140,7 @@ function transaccion() {
     } else {
         if (tipoMovimiento == "consignar") {
             cuentaEncontrada.saldo += dinero
+            console.log(cuentaEncontrada.saldo)
         } else {
             if ((cuentaEncontrada.saldo - dinero) < 0) {
                 alert("Saldo insuficiente")
@@ -165,9 +167,12 @@ function transaccion() {
 ////////////////////////////// MOVIMIENTOS ///////////////////////
 
 function registrarMovimiento(numCuenta, tipo, dinero, saldo, desc) {
+    let numRef = dbMovimiento.length + 1
     dbMovimiento.push({numRef, numCuenta, tipo, dinero, saldo, desc})
     numRef += 1
     agregarDatos(dbMovimiento, "movimientos")
+    agregarDatos(dbCuentas, "cuentas")
+    dbMovimiento = obtenerDatos("movimientos")
 }
 
 function listaMovimientos() {
@@ -216,7 +221,7 @@ function iniciarDB() {
 
 function agregarDatos(dataList, table) {
     let request = indexedDB.open("dbBanco", 1);
-  
+
     request.onsuccess = function(event) {
         let db = event.target.result;
         let transaction = db.transaction([table], "readwrite");
@@ -234,9 +239,9 @@ function agregarDatos(dataList, table) {
             };
         });
     };
-  
+
     request.onerror = function(event) {
-      console.log("Error al abrir la base de datos:", event);
+        console.log("Error al abrir la base de datos:", event);
     };
 }
 
