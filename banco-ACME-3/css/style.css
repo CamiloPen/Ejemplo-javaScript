@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap');
+
+* {
+    font-family: "Oxygen", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 30px;
+}
+
+div, form {
+    display: none;
+    flex-direction: column;
+    margin: 20px;
+    background-color: aquamarine;
+    border: solid 1px;
+}
+
+input, select {
+    text-align: left;
+    background-color: aquamarine;
+    border: none;
+    padding: 20px;
+
+    border-top: solid 1px;
+}
+
+input:hover {
+    background-color: aqua;
+    cursor: pointer;
+}
+
+p, h2 {
+    background-color: aqua;
+    text-align: center;
+    margin: 0px;
+    padding: 20px;
+}
+
+label {
+    text-align: center;
+}
+
+.ver {
+    display: flex;
+}
+
+#btnRegistrar, #btnBuscar, #btnContinuar {
+    text-align: center;
+}
