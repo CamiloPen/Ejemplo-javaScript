@@ -9,11 +9,12 @@ let pass = document.getElementById("buscarContraseña")
 let recibos = document.getElementById("pago")
 let vistaForm = ""
 let dbCuentas = obtenerDatos("cuentas")
-const dbMovimiento = obtenerDatos("movimientos")
+let dbMovimiento = obtenerDatos("movimientos")
 let numRef = dbMovimiento.length + 1
 let cuentaEncontrada = ""
 let tipoMovimiento = ""
 let desc = ""
+let inputs = document.querySelectorAll("input")
 
 menu.classList.add("ver")
 
@@ -61,6 +62,14 @@ function mostrarOpcion(boton){
     }
 }
 
+function limpiar() {
+    inputs.forEach(input => {
+        if (input.type != "button") {
+            input.value = ""
+        } 
+    })
+}
+
 //////////////// USUARIOS /////////////////////////////
 
 function registrar() {
@@ -77,6 +86,7 @@ function registrar() {
         alert("Su numero de cuenta es: " + numCuenta)
         toggle(registarCuenta, menu)
     }
+    limpiar()
     agregarDatos(dbCuentas, "cuentas")
 }
 
@@ -85,8 +95,8 @@ function buscar() {
     const cuentaBuscar = form.get("cuenta")
     if (tipoMovimiento == "lista") {
         vistaForm = document.getElementById("listaMovimientos")
-        listaMovimientos()
         toggle(mostrar, vistaForm)
+        listaMovimientos()
     } else {
         vistaForm = document.getElementById("transaccion")
         if (tipoMovimiento == "consignar") {
@@ -106,10 +116,9 @@ function buscar() {
             let mensaje = "N° de cuenta y contraseña no coinciden"
             cuenta = dbCuentas.find(cuenta => {
                 if (cuenta.numCuenta == cuentaBuscar && cuenta.contraseña == contraseñaBuscar){
-                
-                cuentaEncontrada = cuenta
-                mensaje = false
-                toggle(mostrar, vistaForm)
+                    cuentaEncontrada = cuenta
+                    mensaje = false
+                    toggle(mostrar, vistaForm)
                 }
             })
             if (mensaje != false) {
@@ -136,7 +145,7 @@ function transaccion() {
                 mensaje = false
             } else {
                 if (tipoMovimiento == "pagar") {
-                    let datos = new FormData(mostrar) 
+                    let datos = new FormData(document.getElementById("recibo")) 
                     desc = `Pagó recibo de: ${datos.get("recibo")} Referencia: ${datos.get("numRef")}`
                 }
                 cuentaEncontrada.saldo -= dinero
@@ -150,6 +159,7 @@ function transaccion() {
     }
     recibos.classList.remove("ver")
     pass.removeAttribute("style")
+    limpiar()
 }
 
 ////////////////////////////// MOVIMIENTOS ///////////////////////
@@ -229,7 +239,7 @@ function agregarDatos(dataList, table) {
       console.log("Error al abrir la base de datos:", event);
     };
 }
-  
+
 function obtenerDatos(table) {
     let request = indexedDB.open("dbBanco", 1); 
     let dataList = []

@@ -8,7 +8,7 @@
 </head>
 <body>
     <form id="menuPrincipal">
-        <h2>
+        <h2 class="bordeTop">
             ¡Bienvenido a Acme Bank! <br><br>
             Por favor elija una opción:
         </h2>
@@ -19,24 +19,24 @@
         <input class="busqueda" id="lista" type="button" value="5. Lista de movimientos" onclick="mostrarOpcion(event)">
     </form>
     <form id="registarCuenta" >
-        <h2>Crear Cuenta</h2>
+        <h2 class="bordeTop">Crear Cuenta</h2>
         <input type="text" name="documento" id="documento" placeholder="Por favor digite el número de documento" required>
         <input type="text" name="nombre" id="nombre" placeholder="Por favor escriba su nombre" required>
         <input type="password" name="contraseña" id="contraseña" placeholder="Por ingrese una contraseña" required>
-        <input id="btnRegistrar" type="button" value="Crear cuenta" onclick="registrar()">
+        <input id="btnRegistrar" class="bordeBottom" type="button" value="Crear cuenta" onclick="registrar()">
     </form>
     <form id="busqueda" action="">
-        <h2 class="movimiento"></h2>
+        <h2 class="movimiento bordeTop"></h2>
         <input type="text" id="cuenta" name="cuenta" placeholder="Por favor digite el número de cuenta" required>
         <div style="align-self: center;">
             <input type="checkbox" id="doc">
             <label for="doc">Buscar por documento</label>
         </div>
         <input type="password" name="buscarContraseña" id="buscarContraseña" placeholder="Por ingrese una contraseña" required>
-        <input id="btnBuscar" type="button" value="Continuar" onclick="buscar()">
+        <input id="btnBuscar" class="bordeBottom" type="button" value="Continuar" onclick="buscar()">
     </form>
     <form id="transaccion">
-        <h2  class="movimiento"></h2>
+        <h2  class="movimiento bordeTop"></h2>
         <div id="pago">
             <label for="recibo">Seleccione el recibo a pagar</label>
             <select name="recibo" id="recibo">
@@ -44,17 +44,16 @@
                 <option value="energia">2. Energia</option>
                 <option value="gas">3. Gas</option>
             </select>
-            <input type="text" id="numRef" name="numRef" placeholder="Ingrese el numero de referencia">
+            <input type="text" id="numRef" class="bordeBottom" name="numRef" placeholder="Ingrese el numero de referencia">
         </div>
         <input type="number" id="dinero" name="dinero">
-        <input id="btnContinuar" type="button" value="Continuar" onclick="transaccion()">
+        <input id="btnContinuar" class="bordeBottom" type="button" value="Continuar" onclick="transaccion()">
     </form>
     <div id="listaMovimientos">
-        <h2>Lista de movimientos</h2>
-        <table id="tabla">
-            
+        <h2 class="bordeTop">Lista de movimientos</h2>
+        <table border="1" id="tabla">
         </table>
-        <input type="button" value="Volver" id="atras" onclick="toggle(menu, vistaForm)">
+        <input type="button" class="bordeBottom" value="Volver" id="atras" onclick="toggle(menu, vistaForm)">
     </div>
     <script src="js/main.js"></script>
 </body>

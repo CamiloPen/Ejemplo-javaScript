@@ -13,6 +13,17 @@ div, form {
     margin: 20px;
     background-color: aquamarine;
     border: solid 1px;
+    border-radius: 30px;
+}
+
+.bordeTop {
+    border-top-right-radius: 30px;
+    border-top-left-radius: 30px;
+}
+
+.bordeBottom, #lista {
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
 }
 
 input, select {
@@ -20,7 +31,6 @@ input, select {
     background-color: aquamarine;
     border: none;
     padding: 20px;
-
     border-top: solid 1px;
 }
 
@@ -29,9 +39,8 @@ input:hover {
     cursor: pointer;
 }
 
-p, h2 {
+h2 {
     background-color: aqua;
-    text-align: center;
     margin: 0px;
     padding: 20px;
 }
@@ -44,6 +53,6 @@ label {
     display: flex;
 }
 
-#btnRegistrar, #btnBuscar, #btnContinuar {
+#btnRegistrar, #btnBuscar, #btnContinuar, h2 {
     text-align: center;
 }
