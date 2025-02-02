@@ -2,15 +2,13 @@ iniciarDB()
 
 const menu = document.getElementById("menuPrincipal")
 const forms = document.querySelectorAll("form")
-let registarCuenta = document.getElementById("registarCuenta")
-let mostrar = ""
+let mostrar = document.getElementById("busqueda")
 let dineroMov = document.getElementById("dinero")
 let pass = document.getElementById("buscarContraseña")
 let recibos = document.getElementById("pago")
 let vistaForm = ""
 let dbCuentas = obtenerDatos("cuentas")
 let dbMovimiento = obtenerDatos("movimientos")
-console.log(numRef)
 let cuentaEncontrada = ""
 let tipoMovimiento = ""
 let desc = ""
@@ -27,38 +25,31 @@ function mostrarOpcion(boton){
     if (dbCuentas.length == 0) {
         alert("No hay cuentas registradas")
     } else {
-        const classBoton = boton.target.getAttribute("class")
         tipoMovimiento = boton.target.getAttribute("id")
-        forms.forEach(form => {
-            const idForm = form.getAttribute("id")
-            if (classBoton == idForm) {
-                const titulos = document.querySelectorAll(".movimiento")
-                titulos.forEach(titulo => {
-                    titulo.innerText = tipoMovimiento.toLocaleUpperCase()
-                })
-               
-                switch (tipoMovimiento) {
-                    case "consignar":
-                        pass.setAttribute("style", "display: none;")
-                        dineroMov.setAttribute("placeholder", "Por favor digite la cantidad a consignar")
-                        desc = "Consignación a la cuenta"
-                        break;
-                    case "retirar":
-                        dineroMov.setAttribute("placeholder", "Por favor digite la cantidad a retirar")
-                        desc = "Retiro a la cuenta"
-                        break;
-                    case "pagar":
-                        recibos.classList.add("ver")
-                        dineroMov.setAttribute("placeholder", "Por favor digite la cantidad a pagar")
-                        break;
-                    default:
-                        break
-                }
-
-                mostrar = form
-                toggle(mostrar, menu)
-            } 
+        const titulos = document.querySelectorAll(".movimiento")
+        titulos.forEach(titulo => {
+            titulo.innerText = tipoMovimiento.toLocaleUpperCase()
         })
+        
+        switch (tipoMovimiento) {
+            case "consignar":
+                pass.setAttribute("style", "display: none;")
+                dineroMov.setAttribute("placeholder", "Por favor digite la cantidad a consignar")
+                desc = "Consignación a la cuenta"
+                break;
+            case "retirar":
+                dineroMov.setAttribute("placeholder", "Por favor digite la cantidad a retirar")
+                desc = "Retiro a la cuenta"
+                break;
+            case "pagar":
+                recibos.classList.add("ver")
+                dineroMov.setAttribute("placeholder", "Por favor digite la cantidad a pagar")
+                break;
+            default:
+                break
+        }
+
+        toggle(mostrar, menu)
     }
 }
 
@@ -74,7 +65,7 @@ function limpiar() {
 
 function registrar() {
     let numCuenta = dbCuentas.length +1
-    const form = new FormData(registarCuenta)
+    const form = new FormData(document.getElementById("registarCuenta"))
     const documento = form.get("documento")
     const nombre = form.get("nombre")
     const contraseña = form.get("contraseña")
@@ -84,7 +75,7 @@ function registrar() {
     } else {
         dbCuentas.push({numCuenta, documento, nombre, contraseña, saldo: 0})
         alert("Su numero de cuenta es: " + numCuenta)
-        toggle(registarCuenta, menu)
+        toggle(document.getElementById("registarCuenta"), menu)
     }
     limpiar()
     agregarDatos(dbCuentas, "cuentas")
@@ -94,40 +85,40 @@ function registrar() {
 function buscar() {
     const form = new FormData(mostrar)
     const cuentaBuscar = form.get("cuenta")
-    if (tipoMovimiento == "lista") {
-        vistaForm = document.getElementById("listaMovimientos")
-        toggle(mostrar, vistaForm)
-        listaMovimientos()
-    } else {
-        vistaForm = document.getElementById("transaccion")
-        if (tipoMovimiento == "consignar") {
-            let mensaje = "Numero de cuenta no existe"
-            cuenta = dbCuentas.find(cuenta => {
-                if (cuenta.numCuenta == cuentaBuscar){
-                    mensaje = false
-                    cuentaEncontrada = cuenta
-                    toggle(mostrar, vistaForm)
-                }
-            })
-            if (mensaje != false) {
-                alert(mensaje)
+    vistaForm = document.getElementById("transaccion")
+
+    if (tipoMovimiento == "consignar") {
+        let mensaje = "Numero de cuenta no existe"
+        dbCuentas.find(cuenta => {
+            if (cuenta.numCuenta == cuentaBuscar){
+                mensaje = false
+                cuentaEncontrada = cuenta
+                toggle(mostrar, vistaForm)
             }
-        } else {
-            const contraseñaBuscar = form.get("buscarContraseña")
-            let mensaje = "N° de cuenta y contraseña no coinciden"
-            cuenta = dbCuentas.find(cuenta => {
-                if (cuenta.numCuenta == cuentaBuscar && cuenta.contraseña == contraseñaBuscar){
-                    cuentaEncontrada = cuenta
-                    mensaje = false
-                    toggle(mostrar, vistaForm)
-                }
-            })
-            if (mensaje != false) {
-                alert(mensaje)
-            }
+        })
+        if (mensaje != false) {
+            alert(mensaje)
         }
-    
+    } else {
+        const contraseñaBuscar = pass.value
+        let mensaje = "N° de cuenta y contraseña no coinciden"
+        dbCuentas.find( cuenta => {
+            if (cuenta.numCuenta == cuentaBuscar && cuenta.contraseña == contraseñaBuscar){
+                cuentaEncontrada = cuenta
+                mensaje = false
+                if (tipoMovimiento == "lista") {
+                    vistaForm = document.getElementById("listaMovimientos")
+                    listaMovimientos()
+                }
+                toggle(mostrar, vistaForm)
+            }
+        })
+        if (mensaje != false) {
+            alert(mensaje)
+        }
     }
+    
+    
 }
 
 ////////////////// TRANSACCIONES ///////////////////
@@ -231,7 +222,7 @@ function agregarDatos(dataList, table) {
             let request = store.put(item); 
 
             request.onsuccess = function() {
-                console.log("Item agregado o actualizado correctamente:", item);
+                console.log("Item agregado o actualizado correctamente");
             };
 
             request.onerror = function(event) {
@@ -262,7 +253,7 @@ function obtenerDatos(table) {
                 dataList.push(cursor.value); 
                 cursor.continue();
             } else {
-                console.log("Datos obtenidos:", dataList);
+                console.log("Datos obtenidos");
             }
         };
 
