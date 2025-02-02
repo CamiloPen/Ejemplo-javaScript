@@ -12,7 +12,6 @@ let dbMovimiento = obtenerDatos("movimientos")
 let cuentaEncontrada = ""
 let tipoMovimiento = ""
 let desc = ""
-let inputs = document.querySelectorAll("input")
 
 menu.classList.add("ver")
 
@@ -54,7 +53,7 @@ function mostrarOpcion(boton){
 }
 
 function limpiar() {
-    inputs.forEach(input => {
+    document.querySelectorAll("input").forEach(input => {
         if (input.type != "button") {
             input.value = ""
         } 
@@ -138,7 +137,7 @@ function transaccion() {
                 mensaje = false
             } else {
                 if (tipoMovimiento == "pagar") {
-                    let datos = new FormData(document.getElementById("recibo")) 
+                    let datos = new FormData(vistaForm) 
                     desc = `Pagó recibo de: ${datos.get("recibo")} Referencia: ${datos.get("numRef")}`
                 }
                 cuentaEncontrada.saldo -= dinero
@@ -178,7 +177,7 @@ function listaMovimientos() {
     dbMovimiento.forEach( movimiento => {
         if (movimiento.numCuenta == cuentaEncontrada.numCuenta) {
             lista += `<tr>
-                <td>${movimiento.numRef}</td>
+                <th>${movimiento.numRef}</td>
                 <td>${movimiento.tipo}</td>
                 <td>${movimiento.dinero}</td>
                 <td>${movimiento.saldo}</td>
